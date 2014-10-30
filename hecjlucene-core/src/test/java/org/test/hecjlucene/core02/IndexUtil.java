@@ -2,6 +2,8 @@ package org.test.hecjlucene.core02;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -11,25 +13,28 @@ import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.LockObtainFailedException;
 import org.apache.lucene.util.Version;
-import org.test.hecjlucene.core.LuceneTest01;
 
 public class IndexUtil {
 
 	
 	private String[] ids = {"1","2","3","4","5","6"};
 	
-	private String[] emails = {"fdks@.df.dfd","fsdf@fds.ddf","ggf@cvfdd.dfds","jvcbv@fgf.ff","gvcxf@cvcx.dfds","jjhbv@fdff.mm"};
+	private String[] emails = {"fdks@dffd","fsdf@df.ff","ggf@org.itat","jvcbv@org.itat","gvcxf@org.zttc","jjhbv@fdff.mm"};
 
 	private String[] content = {
-			"ffjfklj fljsdklvbjdkfvjdioj lvcjbkvcj kljfdksl fjksdl",
-			"ffjfgfdgytjjnvnfl ndfggdfvdffjksdl",
-			"ffjfknfgdfgdgdfg gdfg3tggdg44g l",
-			"ffjfklj fljsdnfngfgf7kj67675664jbkvcj kljfdksl fjksdl",
-			"ffjfklj fljsdkrethgfgf love jbkvcj kljfdksl fjksdl",
+			"ffjfklj fljsdk I love ioj lvcjbkvcj kljfdksl fjksdl",
+			"ffjfgfdgytjjnvnfl n love fvdffjksdl",
+			"ffjfknfgdfgdgdfg love gdfg3tggdg44g l",
+			"ffjfklj fljs love dnfngfgf7kj6767love 5664jbkvcj kljfdksl fjksdl",
+			"ffjfklj fljsdkret love hgfgf love jbkvcj kljfdksl fjksdl",
 			"ffjfklj fljsdklvbjdkfvjdioj love lvcjbkvcj kljfdksl fjksdl"
 	};
 	
@@ -40,9 +45,14 @@ public class IndexUtil {
 
 	private Directory directory = null ;
 	
+	private Map<String,Float> scores = new HashMap();
 	
 	public IndexUtil(){
 		try {
+			
+			scores.put("org.itat", 2.0f);
+			scores.put("org.zttc", 1.5f);
+			
 			directory = FSDirectory.open(new File("E:/lucene/02"));
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -66,6 +76,12 @@ public class IndexUtil {
 				doc.add(new Field("content",content[i],Field.Store.NO,Field.Index.ANALYZED));
 				doc.add(new Field("name",names[i],Field.Store.YES,Field.Index.NOT_ANALYZED_NO_NORMS));
 			
+				String et = emails[i].substring(emails[i].lastIndexOf("@")+1);
+				if(scores.containsKey(et)){
+					doc.setBoost(scores.get(et));
+				}else{
+					doc.setBoost(0.5f);
+				}
 				writer.addDocument(doc);
 			}
 			
@@ -304,17 +320,60 @@ public class IndexUtil {
 		
 	}
 	
+	/**
+	 * 查询
+	 * @param args
+	 */
+	
+	public void search(){
+		IndexReader reader = null;
+		try {
+			reader = IndexReader.open(directory);
+			
+			IndexSearcher search = new IndexSearcher(reader);
+			
+			TermQuery query = new TermQuery(new Term("content","love"));
+			TopDocs tds= search.search(query, 10);
+			for(ScoreDoc sd :tds.scoreDocs){
+				Document doc = search.doc(sd.doc);
+				System.out.println(+sd.doc+","+doc.get("name")+","+doc.get("id")+"-----"+doc.get("content"));
+			}
+			
+			
+			
+			
+		} catch (CorruptIndexException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			try {
+				reader.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		
+		
+		
+	}
+	
 	
 	public static void main(String[] args) {
 		
-//		new IndexUtil().index();
+		new IndexUtil().index();
 //		new IndexUtil().query();
 //		new IndexUtil().deleteIndex();
 //		new IndexUtil().unDelete();
 //		new IndexUtil().forceDeleteIndex();
 //		new IndexUtil().forceMerge();
-		new IndexUtil().update();
+//		new IndexUtil().update();
 		new IndexUtil().query();
+		new IndexUtil().search();
 	}
 	
 	
