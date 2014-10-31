@@ -2,12 +2,17 @@ package org.test.hecjlucene.core02;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.document.DateTools;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.document.NumericField;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
@@ -38,23 +43,37 @@ public class IndexUtil {
 			"ffjfklj fljsdklvbjdkfvjdioj love lvcjbkvcj kljfdksl fjksdl"
 	};
 	
-	
+	private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
 	private int[] attachs = {3,34,43,54,2,4};
 	
 	private String[] names = {"zhangsna","lisi","zhangjie","xiena","hedhoajie","ding"};
 
 	private Directory directory = null ;
 	
-	private Map<String,Float> scores = new HashMap();
+	private Map<String,Float> scores = new HashMap<String,Float>();
+	
+	private Date[] dates = null ;
 	
 	public IndexUtil(){
 		try {
+			dates = new Date[]{
+					format.parse("2014-01-01"),
+					format.parse("2014-02-01"),
+					format.parse("2014-04-01"),
+					format.parse("2014-03-01"),
+					format.parse("2014-04-03"),
+					format.parse("2014-04-11"),
+			};
 			
 			scores.put("org.itat", 2.0f);
 			scores.put("org.zttc", 1.5f);
 			
 			directory = FSDirectory.open(new File("E:/lucene/02"));
 		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -75,7 +94,9 @@ public class IndexUtil {
 				doc.add(new Field("email",emails[i],Field.Store.YES,Field.Index.NOT_ANALYZED));
 				doc.add(new Field("content",content[i],Field.Store.NO,Field.Index.ANALYZED));
 				doc.add(new Field("name",names[i],Field.Store.YES,Field.Index.NOT_ANALYZED_NO_NORMS));
-			
+				doc.add(new NumericField("attachs", Field.Store.YES,true).setIntValue(attachs[i]));
+				doc.add(new NumericField("date", Field.Store.YES,true).setLongValue(dates[i].getTime()));
+				
 				String et = emails[i].substring(emails[i].lastIndexOf("@")+1);
 				if(scores.containsKey(et)){
 					doc.setBoost(scores.get(et));
@@ -336,7 +357,8 @@ public class IndexUtil {
 			TopDocs tds= search.search(query, 10);
 			for(ScoreDoc sd :tds.scoreDocs){
 				Document doc = search.doc(sd.doc);
-				System.out.println(+sd.doc+","+doc.get("name")+","+doc.get("id")+"-----"+doc.get("content"));
+				System.out.println("------"+sd.doc+","+doc.get("name")+","+doc.get("id")+"-----"+doc.get("content"));
+				System.out.println(doc.get("attachs")+","+doc.get("date"));
 			}
 			
 			
@@ -348,7 +370,7 @@ public class IndexUtil {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}finally{
+		} finally{
 			try {
 				reader.close();
 			} catch (IOException e) {
