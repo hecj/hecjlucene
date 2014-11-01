@@ -18,4 +18,18 @@ public class IndexSearcherTest {
 		indexSearcher.searchByTerm("content","i", 10);
 		
 	}
+	@Test
+	public void testSearchByTermRange(){
+		
+		IndexSearcherUtil indexSearcher = new IndexSearcherUtil();
+		indexSearcher.searchByTermRange("name", "m", "i", 10);
+		
+	}
+	@Test
+	public void testSearchByTermNumricRange(){
+		
+		IndexSearcherUtil indexSearcher = new IndexSearcherUtil();
+		indexSearcher.searchByTermNumricRange("attach", 1, 4, 10);
+		
+	}
 }

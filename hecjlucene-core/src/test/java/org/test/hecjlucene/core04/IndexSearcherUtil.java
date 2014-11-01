@@ -20,9 +20,11 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.NumericRangeQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.search.TermRangeQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
@@ -198,6 +200,78 @@ public class IndexSearcherUtil {
 				System.out.println(doc.get("id")+"---->"+
 						doc.get("name")+"["+doc.get("email")+"]-->"+doc.get("id")+","+
 						doc.get("attach")+","+doc.get("date"));
+			}
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally{
+			try {
+				indexSearcher.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	/**
+	 * @函数功能说明 模糊查询
+	 * @修改作者名字 JECJ  
+	 * @修改时间 2014年11月1日
+	 * @修改内容
+	 * @参数： @param field
+	 * @参数： @param start
+	 * @参数： @param end
+	 * @参数： @param num    
+	 * @return void   
+	 * @throws
+	 */
+	public void searchByTermRange(String field,String start,String end,int num){
+		IndexSearcher indexSearcher = getSearcher();
+		try {
+			Query query = new TermRangeQuery(field, start, end, true, true);
+			TopDocs topDocs = indexSearcher.search(query,num);
+			System.out.println("一共查询了条数："+topDocs.totalHits);
+			ScoreDoc[] scoreDoc= topDocs.scoreDocs;
+			for(ScoreDoc sd :scoreDoc){
+				Document doc = indexSearcher.doc(sd.doc);
+				System.out.println(doc.get("id")+"---->  "+
+						doc.get("name")+"  ["+doc.get("email")+"]-->"+doc.get("id")+","+
+						doc.get("attach")+","+doc.get("date"));
+			}
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally{
+			try {
+				indexSearcher.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	/**
+	 * @函数功能说明 数字模糊查询
+	 * @修改作者名字 JECJ  
+	 * @修改时间 2014年11月1日
+	 * @修改内容
+	 * @参数： @param field
+	 * @参数： @param start
+	 * @参数： @param end
+	 * @参数： @param num    
+	 * @return void   
+	 * @throws
+	 */
+	public void searchByTermNumricRange(String field,int start,int end,int num){
+		IndexSearcher indexSearcher = getSearcher();
+		try {
+			Query query = NumericRangeQuery.newIntRange(field, start, end, true, true);
+			TopDocs topDocs = indexSearcher.search(query,num);
+			System.out.println("一共查询了条数："+topDocs.totalHits);
+			ScoreDoc[] scoreDoc= topDocs.scoreDocs;
+			for(ScoreDoc sd :scoreDoc){
+				Document doc = indexSearcher.doc(sd.doc);
+				System.out.println(doc.get("id")+"---->  name："+
+						doc.get("name")+"  [email："+doc.get("email")+"]-->id:"+doc.get("id")+",attach:"+
+						doc.get("attach")+",date:"+doc.get("date"));
 			}
 			
 		} catch (IOException e) {
