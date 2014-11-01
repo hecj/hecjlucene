@@ -483,4 +483,40 @@ public class IndexSearcherUtil {
 		}
 	}
 	
+	/**
+	 * @函数功能说明 基于Query查询
+	 * @修改作者名字 JECJ  
+	 * @修改时间 2014年11月1日
+	 * @修改内容
+	 * @参数： @param field
+	 * @参数： @param start
+	 * @参数： @param end
+	 * @参数： @param num    
+	 * @return void   
+	 * @throws
+	 */
+	public void searchByQueryPhrase(Query query,int num){
+		IndexSearcher indexSearcher = getSearcher();
+		try {
+			TopDocs topDocs = indexSearcher.search(query,num);
+			System.out.println("一共查询了条数："+topDocs.totalHits);
+			ScoreDoc[] scoreDoc= topDocs.scoreDocs;
+			for(ScoreDoc sd :scoreDoc){
+				Document doc = indexSearcher.doc(sd.doc);
+				System.out.println(doc.get("id")+"---->  name："+
+						doc.get("name")+"  [email："+doc.get("email")+"]-->id:"+doc.get("id")+",attach:"+
+						doc.get("attach")+",date:"+doc.get("date"));
+			}
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally{
+			try {
+				indexSearcher.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 }
