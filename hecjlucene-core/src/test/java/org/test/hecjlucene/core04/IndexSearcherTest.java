@@ -32,4 +32,39 @@ public class IndexSearcherTest {
 		indexSearcher.searchByTermNumricRange("attach", 1, 4, 10);
 		
 	}
+	@Test
+	public void testSearchByPrefixQuery(){
+		
+		IndexSearcherUtil indexSearcher = new IndexSearcherUtil();
+		indexSearcher.searchByPrefixQuery("name","j", 10);
+		
+	}
+	@Test
+	public void testSearchByWildcardQuery(){
+		
+		IndexSearcherUtil indexSearcher = new IndexSearcherUtil();
+		indexSearcher.searchByWildcardQuery("email","*@itat*", 10);
+		
+	}
+	@Test
+	public void testSearchByBooleanQuery(){
+		
+		IndexSearcherUtil indexSearcher = new IndexSearcherUtil();
+		indexSearcher.searchByBooleanQuery(10);
+		
+	}
+	@Test
+	public void testSearchByPhraseQuery(){
+		
+		IndexSearcherUtil indexSearcher = new IndexSearcherUtil();
+		indexSearcher.searchByPhraseQuery(10);
+		
+	}
+	@Test
+	public void testSearchByFuzzyQuery(){
+		
+		IndexSearcherUtil indexSearcher = new IndexSearcherUtil();
+		indexSearcher.searchByFuzzyQuery("content","pinapeng",10);
+		
+	}
 }

@@ -19,13 +19,19 @@ import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.search.BooleanClause.Occur;
+import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.FuzzyQuery;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.NumericRangeQuery;
+import org.apache.lucene.search.PhraseQuery;
+import org.apache.lucene.search.PrefixQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TermRangeQuery;
 import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.WildcardQuery;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.LockObtainFailedException;
@@ -265,6 +271,198 @@ public class IndexSearcherUtil {
 		try {
 			Query query = NumericRangeQuery.newIntRange(field, start, end, true, true);
 			TopDocs topDocs = indexSearcher.search(query,num);
+			System.out.println("一共查询了条数："+topDocs.totalHits);
+			ScoreDoc[] scoreDoc= topDocs.scoreDocs;
+			for(ScoreDoc sd :scoreDoc){
+				Document doc = indexSearcher.doc(sd.doc);
+				System.out.println(doc.get("id")+"---->  name："+
+						doc.get("name")+"  [email："+doc.get("email")+"]-->id:"+doc.get("id")+",attach:"+
+						doc.get("attach")+",date:"+doc.get("date"));
+			}
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally{
+			try {
+				indexSearcher.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	/**
+	 * @函数功能说明 前缀查询
+	 * @修改作者名字 JECJ  
+	 * @修改时间 2014年11月1日
+	 * @修改内容
+	 * @参数： @param field
+	 * @参数： @param start
+	 * @参数： @param end
+	 * @参数： @param num    
+	 * @return void   
+	 * @throws
+	 */
+	public void searchByPrefixQuery(String field,String value,int num){
+		IndexSearcher indexSearcher = getSearcher();
+		try {
+			Query query = new PrefixQuery(new Term(field, value));
+			TopDocs topDocs = indexSearcher.search(query,num);
+			System.out.println("一共查询了条数："+topDocs.totalHits);
+			ScoreDoc[] scoreDoc= topDocs.scoreDocs;
+			for(ScoreDoc sd :scoreDoc){
+				Document doc = indexSearcher.doc(sd.doc);
+				System.out.println(doc.get("id")+"---->  name："+
+						doc.get("name")+"  [email："+doc.get("email")+"]-->id:"+doc.get("id")+",attach:"+
+						doc.get("attach")+",date:"+doc.get("date"));
+			}
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally{
+			try {
+				indexSearcher.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	/**
+	 * @函数功能说明 通配符查询
+	 * @修改作者名字 JECJ  
+	 * @修改时间 2014年11月1日
+	 * @修改内容
+	 * @参数： @param field
+	 * @参数： @param start
+	 * @参数： @param end
+	 * @参数： @param num    
+	 * @return void   
+	 * @throws
+	 */
+	public void searchByWildcardQuery(String field,String value,int num){
+		IndexSearcher indexSearcher = getSearcher();
+		try {
+			Query query = new WildcardQuery(new Term(field, value));
+			TopDocs topDocs = indexSearcher.search(query,num);
+			System.out.println("一共查询了条数："+topDocs.totalHits);
+			ScoreDoc[] scoreDoc= topDocs.scoreDocs;
+			for(ScoreDoc sd :scoreDoc){
+				Document doc = indexSearcher.doc(sd.doc);
+				System.out.println(doc.get("id")+"---->  name："+
+						doc.get("name")+"  [email："+doc.get("email")+"]-->id:"+doc.get("id")+",attach:"+
+						doc.get("attach")+",date:"+doc.get("date"));
+			}
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally{
+			try {
+				indexSearcher.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	/**
+	 * @函数功能说明 BooleanQuery查询
+	 * @修改作者名字 JECJ  
+	 * @修改时间 2014年11月1日
+	 * @修改内容
+	 * @参数： @param field
+	 * @参数： @param start
+	 * @参数： @param end
+	 * @参数： @param num    
+	 * @return void   
+	 * @throws
+	 */
+	public void searchByBooleanQuery(int num){
+		IndexSearcher indexSearcher = getSearcher();
+		try {
+			BooleanQuery query = new BooleanQuery();
+			/**
+			 * Occuer.MUST 必须出现
+			 * Occuer.MUST_NOT 必须没有
+			 * Occuer.SHOULD 可以出现
+			 */
+			query.add(new TermQuery(new Term("name", "hechaojie")), Occur.MUST_NOT);
+			query.add(new TermQuery(new Term("content", "like")), Occur.MUST);
+			TopDocs topDocs = indexSearcher.search(query,num);
+			System.out.println("一共查询了条数："+topDocs.totalHits);
+			ScoreDoc[] scoreDoc= topDocs.scoreDocs;
+			for(ScoreDoc sd :scoreDoc){
+				Document doc = indexSearcher.doc(sd.doc);
+				System.out.println(doc.get("id")+"---->  name："+
+						doc.get("name")+"  [email："+doc.get("email")+"]-->id:"+doc.get("id")+",attach:"+
+						doc.get("attach")+",date:"+doc.get("date"));
+			}
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally{
+			try {
+				indexSearcher.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	/**
+	 * @函数功能说明 短语查询
+	 * @修改作者名字 JECJ  
+	 * @修改时间 2014年11月1日
+	 * @修改内容
+	 * @参数： @param field
+	 * @参数： @param start
+	 * @参数： @param end
+	 * @参数： @param num    
+	 * @return void   
+	 * @throws
+	 */
+	public void searchByPhraseQuery(int num){
+		IndexSearcher indexSearcher = getSearcher();
+		try {
+			
+			PhraseQuery phraseQuery = new PhraseQuery();
+			phraseQuery.setSlop(2);
+			phraseQuery.add(new Term("content", "i"));
+			phraseQuery.add(new Term("content", "too"));
+			TopDocs topDocs = indexSearcher.search(phraseQuery,num);
+			System.out.println("一共查询了条数："+topDocs.totalHits);
+			ScoreDoc[] scoreDoc= topDocs.scoreDocs;
+			for(ScoreDoc sd :scoreDoc){
+				Document doc = indexSearcher.doc(sd.doc);
+				System.out.println(doc.get("id")+"---->  name："+
+						doc.get("name")+"  [email："+doc.get("email")+"]-->id:"+doc.get("id")+",attach:"+
+						doc.get("attach")+",date:"+doc.get("date"));
+			}
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally{
+			try {
+				indexSearcher.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	/**
+	 * @函数功能说明 模糊查询
+	 * @修改作者名字 JECJ  
+	 * @修改时间 2014年11月1日
+	 * @修改内容
+	 * @参数： @param field
+	 * @参数： @param start
+	 * @参数： @param end
+	 * @参数： @param num    
+	 * @return void   
+	 * @throws
+	 */
+	public void searchByFuzzyQuery(String field,String value,int num){
+		IndexSearcher indexSearcher = getSearcher();
+		try {
+			FuzzyQuery phraseQuery = new FuzzyQuery(new Term(field, value));
+			TopDocs topDocs = indexSearcher.search(phraseQuery,num);
 			System.out.println("一共查询了条数："+topDocs.totalHits);
 			ScoreDoc[] scoreDoc= topDocs.scoreDocs;
 			for(ScoreDoc sd :scoreDoc){
