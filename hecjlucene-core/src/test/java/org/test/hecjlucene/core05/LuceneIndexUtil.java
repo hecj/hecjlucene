@@ -26,7 +26,7 @@ import org.apache.lucene.store.LockObtainFailedException;
 import org.apache.lucene.util.Version;
 
 /**
- * @类功能说明： Lucene实现分页功能
+ * @类功能说明： Lucene实现分页功能(第一种分页方式)
  * @类修改者：
  * @修改日期：
  * @修改说明：
