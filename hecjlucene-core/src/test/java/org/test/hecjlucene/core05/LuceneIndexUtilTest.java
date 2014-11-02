@@ -22,6 +22,10 @@ public class LuceneIndexUtilTest {
 	@Test
 	public void testQueryByQuery(){
 		LuceneIndexUtil luceneIndexUtil = new LuceneIndexUtil();
-		luceneIndexUtil.queryByQuery("int",4,5);
+		int indexPage = 2;
+		int pageSize = 5;
+		luceneIndexUtil.queryByQuery("int",indexPage,pageSize);
+		System.out.println("----------------------------------------");
+		luceneIndexUtil.queryPageByAfter("int",indexPage,pageSize);
 	}
 }

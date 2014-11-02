@@ -26,7 +26,7 @@ import org.apache.lucene.store.LockObtainFailedException;
 import org.apache.lucene.util.Version;
 
 /**
- * @类功能说明： Lucene实现分页功能(第一种分页方式)
+ * @类功能说明： Lucene实现分页功能
  * @类修改者：
  * @修改日期：
  * @修改说明：
@@ -199,7 +199,7 @@ public class LuceneIndexUtil {
 		}
 	}
 	/**
-	 * @函数功能说明 分页查询
+	 * @函数功能说明 分页查询(第一种分页方式)
 	 * @修改作者名字 JECJ
 	 * @修改时间 2014年11月2日
 	 * @修改内容
@@ -218,13 +218,13 @@ public class LuceneIndexUtil {
 			//得到Query
 			Query q = parser.parse(queryStr);
 			//查询
-			TopDocs topDocs = searcher.search(q, 500);
+			int queryMaxNun = indexPage*pageSize ;
+			TopDocs topDocs = searcher.search(q, queryMaxNun);
 			//得到ScoreDoc[]
 			ScoreDoc[] scoreDocs = topDocs.scoreDocs;
 			int start = (indexPage - 1)*pageSize ;
-			int end = start+pageSize;
 			//遍历
-			for(int i= start; i< end ;i++){
+			for(int i= start; i< scoreDocs.length ;i++){
 				ScoreDoc sd = scoreDocs[i];
 				//获取Document
 				Document doc = searcher.doc(sd.doc);
@@ -243,4 +243,47 @@ public class LuceneIndexUtil {
 		}
 	}
 
+	/**
+	 * @函数功能说明 分页查询(第二种分页方式)
+	 * @修改作者名字 JECJ
+	 * @修改时间 2014年11月2日
+	 * @修改内容
+	 * @参数： @param query
+	 * @参数： @param indexPage
+	 * @参数： @param pageSize
+	 * @return void
+	 * @throws
+	 */
+	public void queryPageByAfter(String queryStr, int indexPage, int pageSize) {
+		
+		IndexSearcher searcher = getSearcher();
+		//创建QueryParser
+		QueryParser parser = new QueryParser(Version.LUCENE_35, "content", new StandardAnalyzer(Version.LUCENE_35));
+		try {
+			//得到Query
+			Query q = parser.parse(queryStr);
+			//查询：计算最多查询条数
+			int queryMaxNun = indexPage*pageSize ;
+			TopDocs topDocs = searcher.search(q, queryMaxNun);
+			//得到ScoreDoc[]
+			ScoreDoc[] scoreDocs = topDocs.scoreDocs;
+			//遍历
+			for(int i = (indexPage-1)*pageSize; i< scoreDocs.length;i++){
+				ScoreDoc sd = scoreDocs[i];
+				//获取Document
+				Document doc = searcher.doc(sd.doc);
+				System.out.println(i+"-->filename:"+doc.get("filename")+",path:"+doc.get("path"));
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally{
+			try {
+				searcher.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 }
