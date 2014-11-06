@@ -35,6 +35,7 @@
 		<lucene.version>3.5.0</lucene.version>
 		<junit.version>4.4</junit.version>
 		<commons.io.version>2.4</commons.io.version>
+		<mmseg.version>1.10.0</mmseg.version>
 
 	</properties>
 
@@ -57,6 +58,12 @@
 				<groupId>commons-io</groupId>
 				<artifactId>commons-io</artifactId>
 				<version>${commons.io.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.chenlb.mmseg4j</groupId>
+				<artifactId>mmseg4j-core</artifactId>
+				<version>${mmseg.version}</version>
 			</dependency>
 
 

@@ -28,6 +28,11 @@
 			<artifactId>commons-io</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>com.chenlb.mmseg4j</groupId>
+			<artifactId>mmseg4j-core</artifactId>
+		</dependency>
+
 	</dependencies>
 
 </project>
