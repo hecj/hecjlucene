@@ -6,6 +6,7 @@ import java.util.Set;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.LetterTokenizer;
 import org.apache.lucene.analysis.LowerCaseFilter;
+import org.apache.lucene.analysis.StopAnalyzer;
 import org.apache.lucene.analysis.StopFilter;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.util.Version;
@@ -29,8 +30,11 @@ public class MyStopAnalyzer extends Analyzer {
 	 *@描述：{todo}
 	 * @param str
 	 */
+	@SuppressWarnings("unchecked")
 	public MyStopAnalyzer(String[] str) {
-		stops = StopFilter.makeStopSet(str, true);
+		
+		stops = StopFilter.makeStopSet(Version.LUCENE_35,str, true);
+		stops.addAll(StopAnalyzer.ENGLISH_STOP_WORDS_SET);
 	}
 
 	@Override

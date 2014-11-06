@@ -69,10 +69,14 @@ public class TestAnalyzerUtil {
 	
 	@Test
 	public void test04() {
-		
+		/*自定义分词器*/
 		Analyzer analyzer = new MyStopAnalyzer(new String[]{"you"});
+		Analyzer analyzer1 = new StandardAnalyzer(Version.LUCENE_35);
 		String txt = "how are you thank you";
+		System.out.println(txt);
 		AnalyzerUtil.displayAllTokenInfo(txt, analyzer);
+		System.out.println("----------------------------------");
+		AnalyzerUtil.displayAllTokenInfo(txt, analyzer1);
 	}
 
 }
