@@ -1,5 +1,7 @@
 package org.test.hecjlucene.core06_analyzer;
 
+import java.io.File;
+
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.SimpleAnalyzer;
 import org.apache.lucene.analysis.StopAnalyzer;
@@ -7,6 +9,8 @@ import org.apache.lucene.analysis.WhitespaceAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.util.Version;
 import org.junit.Test;
+
+import com.chenlb.mmseg4j.analysis.MMSegAnalyzer;
 
 public class TestAnalyzerUtil {
 
@@ -77,6 +81,12 @@ public class TestAnalyzerUtil {
 		AnalyzerUtil.displayAllTokenInfo(txt, analyzer);
 		System.out.println("----------------------------------");
 		AnalyzerUtil.displayAllTokenInfo(txt, analyzer1);
+	}
+	@Test
+	public void test05() {
+		Analyzer analyzer = new MMSegAnalyzer(new File("E:\\mmseg4j-all-1.8.5-with-dic\\data"));
+		String str = "我来自安徽合肥一个学校。白云山脚下昭通张杰";
+		AnalyzerUtil.displayToken(str, analyzer);
 	}
 
 }
