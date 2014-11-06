@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: org.test.hecjlucene.core04.IndexSearcherTest
 -------------------------------------------------------------------------------
-Tests run: 10, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.534 sec
+Tests run: 10, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.321 sec

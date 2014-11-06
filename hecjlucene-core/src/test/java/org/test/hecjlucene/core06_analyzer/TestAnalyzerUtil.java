@@ -57,10 +57,13 @@ public class TestAnalyzerUtil {
 		Analyzer analyzer4 = new WhitespaceAnalyzer(Version.LUCENE_35);
 		
 		String txt = "how are you thank you";
-		
+		System.out.println(txt);
 		AnalyzerUtil.displayAllTokenInfo(txt, analyzer1);
+		System.out.println("----------------------------");
 		AnalyzerUtil.displayAllTokenInfo(txt, analyzer2);
+		System.out.println("----------------------------");
 		AnalyzerUtil.displayAllTokenInfo(txt, analyzer3);
+		System.out.println("----------------------------");
 		AnalyzerUtil.displayAllTokenInfo(txt, analyzer4);
 	}
 

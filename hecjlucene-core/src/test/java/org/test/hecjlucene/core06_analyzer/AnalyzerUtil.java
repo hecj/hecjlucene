@@ -41,7 +41,7 @@ public class AnalyzerUtil {
 		try {
 			while(stream.incrementToken()){
 				System.out.print(pia.getPositionIncrement()+":");
-				System.out.print(cta+"["+oa.startOffset()+"-"+oa.endOffset()+"]-->"+ta.type()+"\n");
+				System.out.print(cta+"["+oa.startOffset()+"-"+oa.endOffset()+"]-->"+ta.type()+"~"+ta.type().toLowerCase()+"\n");
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
