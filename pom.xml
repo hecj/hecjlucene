@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
@@ -6,7 +7,6 @@
 	<version>${version}</version>
 	<packaging>pom</packaging>
 	<modules>
-		<module>hecjlucene-core</module>
 		<module>hecjlucene-core</module>
 	</modules>
 
@@ -35,8 +35,6 @@
 		<lucene.version>3.5.0</lucene.version>
 		<junit.version>4.4</junit.version>
 		<commons.io.version>2.4</commons.io.version>
-		<mmseg.version>1.10.0</mmseg.version>
-
 	</properties>
 
 	<dependencyManagement>
@@ -58,12 +56,6 @@
 				<groupId>commons-io</groupId>
 				<artifactId>commons-io</artifactId>
 				<version>${commons.io.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>com.chenlb.mmseg4j</groupId>
-				<artifactId>mmseg4j-core</artifactId>
-				<version>${mmseg.version}</version>
 			</dependency>
 
 
