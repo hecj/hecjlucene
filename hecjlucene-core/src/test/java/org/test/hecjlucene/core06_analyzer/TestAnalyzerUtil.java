@@ -66,5 +66,13 @@ public class TestAnalyzerUtil {
 		System.out.println("----------------------------");
 		AnalyzerUtil.displayAllTokenInfo(txt, analyzer4);
 	}
+	
+	@Test
+	public void test04() {
+		
+		Analyzer analyzer = new MyStopAnalyzer(new String[]{"you"});
+		String txt = "how are you thank you";
+		AnalyzerUtil.displayAllTokenInfo(txt, analyzer);
+	}
 
 }
