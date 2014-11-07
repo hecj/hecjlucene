@@ -4,4 +4,4 @@
 .settings/
 
 # Maven
-target/
+*.class
