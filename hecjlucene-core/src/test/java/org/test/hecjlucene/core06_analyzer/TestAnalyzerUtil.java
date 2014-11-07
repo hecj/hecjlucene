@@ -84,8 +84,8 @@ public class TestAnalyzerUtil {
 	}
 	@Test
 	public void test05() {
-		Analyzer analyzer = new MMSegAnalyzer(new File("E:\\mmseg4j-all-1.8.5-with-dic\\data"));
-		String str = "我来自安徽合肥一个学校。白云山脚下昭通张杰";
+		Analyzer analyzer = new MMSegAnalyzer(new File("src/main/resources/mmseg4j/data"));
+		String str = "我来自安徽合肥一个学校。白云山脚下昭通张杰，何超杰";
 		AnalyzerUtil.displayToken(str, analyzer);
 	}
 
