@@ -11,7 +11,6 @@ import org.apache.lucene.util.Version;
 import org.junit.Test;
 
 import com.chenlb.mmseg4j.analysis.MMSegAnalyzer;
-
 public class TestAnalyzerUtil {
 
 	@Test
