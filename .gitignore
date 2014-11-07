@@ -4,5 +4,4 @@
 .settings/
 
 # Maven
-*.class
-target/*
+hecjlucene-core/target/*
