@@ -21,10 +21,18 @@ import com.chenlb.mmseg4j.analysis.MMSegTokenizer;
 public class MySameAnalyzer extends Analyzer {
 	
 	private Dictionary dic = null ;
+	private SameWordContent sameWordContent;
+	
+	public MySameAnalyzer(SameWordContent sameWordContent) {
+		
+		this.sameWordContent = sameWordContent ;
+		
+	}
+
 	@Override
 	public TokenStream tokenStream(String fieldName, Reader reader) {
 		dic = Dictionary.getInstance("src/main/resources/mmseg4j/data");
-		return new MySameTokenFilter(new MMSegTokenizer(new MaxWordSeg(dic),reader));
+		return new MySameTokenFilter(new MMSegTokenizer(new MaxWordSeg(dic),reader),sameWordContent);
 	}
 
 }
