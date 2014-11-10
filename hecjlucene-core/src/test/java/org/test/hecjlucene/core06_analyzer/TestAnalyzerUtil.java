@@ -84,7 +84,22 @@ public class TestAnalyzerUtil {
 	@Test
 	public void test05() {
 		Analyzer analyzer = new MMSegAnalyzer(new File("src/main/resources/mmseg4j/data"));
-		String str = "我来自安徽合肥一个学校。白云山脚下昭通张杰，何超杰";
+		String str = "我来自安徽合肥一个学校。白云山脚下昭通张杰，何超杰作";
+		AnalyzerUtil.displayToken(str, analyzer);
+	}
+	/**
+	 * @函数功能说明 同义词
+	 * @修改作者名字 HECJ  
+	 * @修改时间 2014年11月10日
+	 * @修改内容
+	 * @参数：     
+	 * @return void   
+	 * @throws
+	 */
+	@Test
+	public void test06() {
+		Analyzer analyzer = new MySameAnalyzer();
+		String str = "我来自安徽合肥一个学校。白云山脚下昭通张杰，何超杰作";
 		AnalyzerUtil.displayToken(str, analyzer);
 	}
 
