@@ -1,12 +1,26 @@
 package org.test.hecjlucene.core06_analyzer;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.SimpleAnalyzer;
 import org.apache.lucene.analysis.StopAnalyzer;
 import org.apache.lucene.analysis.WhitespaceAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.index.CorruptIndexException;
+import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.Term;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.LockObtainFailedException;
+import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
 import org.junit.Test;
 
@@ -103,6 +117,44 @@ public class TestAnalyzerUtil {
 		AnalyzerUtil.displayToken(str, analyzer);
 		System.out.println("------------------------------");
 		AnalyzerUtil.displayAllTokenInfo(str, analyzer);
+		
+	}
+	/**
+	 * @函数功能说明 同义词+索引查询
+	 * @修改作者名字 HECJ  
+	 * @修改时间 2014年11月10日
+	 * @修改内容
+	 * @参数：     
+	 * @return void   
+	 * @throws
+	 */
+	@Test
+	public void test07() {
+		Analyzer analyzer = new MySameAnalyzer();
+		String str = "我来自中国的一个学校。白云山脚下昭通张杰，何超杰作";
+		
+		Directory dir = new RAMDirectory();
+		IndexWriter writer = null ;
+		try {
+			writer = new IndexWriter(dir,new IndexWriterConfig(Version.LUCENE_35, analyzer));
+			Document doc = new Document();
+			doc.add(new Field("content",str, Field.Store.YES,Field.Index.ANALYZED));
+			writer.addDocument(doc);
+			writer.close();
+			
+			IndexSearcher searcher = new IndexSearcher(IndexReader.open(dir));
+			TopDocs topDocs = searcher.search(new TermQuery(new Term("content", "大陆")), 10);
+			Document d = searcher.doc(topDocs.scoreDocs[0].doc);
+			System.out.println(d.get("content"));
+			searcher.close();
+		
+		} catch (CorruptIndexException e) {
+			e.printStackTrace();
+		} catch (LockObtainFailedException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 	}
 
