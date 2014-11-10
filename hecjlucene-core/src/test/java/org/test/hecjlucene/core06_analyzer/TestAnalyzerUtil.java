@@ -99,8 +99,11 @@ public class TestAnalyzerUtil {
 	@Test
 	public void test06() {
 		Analyzer analyzer = new MySameAnalyzer();
-		String str = "我来自安徽合肥一个学校。白云山脚下昭通张杰，何超杰作";
+		String str = "我来自中国的一个学校。白云山脚下昭通张杰，何超杰作";
 		AnalyzerUtil.displayToken(str, analyzer);
+		System.out.println("------------------------------");
+		AnalyzerUtil.displayAllTokenInfo(str, analyzer);
+		
 	}
 
 }
