@@ -27,7 +27,7 @@ public class TestSearcherSort {
 		/**
 		 * 设置了排序后就没有评分了
 		 */
-		searcherSort.searcher("int", null);
+/*		searcherSort.searcher("int", null);
 		System.out.println("============================================");
 		//Id记性排序
 		searcherSort.searcher("int", Sort.INDEXORDER);
@@ -36,6 +36,11 @@ public class TestSearcherSort {
 		searcherSort.searcher("int", Sort.RELEVANCE);
 		System.out.println("============================================");
 		//对size排序
-		searcherSort.searcher("int", new Sort(new SortField("size",SortField.INT)));
+		searcherSort.searcher("int", new Sort(new SortField("size",SortField.LONG)));
+		System.out.println("============================================");
+		//通过日期排序 ,true表示从大到小排序
+		searcherSort.searcher("null", new Sort(new SortField("date",SortField.LONG,true)));
+*/		//通过文件名排序,组合排序
+		searcherSort.searcher("null", new Sort(new SortField("date",SortField.LONG,true),new SortField("filename",SortField.STRING,true)));
 	}
 }
