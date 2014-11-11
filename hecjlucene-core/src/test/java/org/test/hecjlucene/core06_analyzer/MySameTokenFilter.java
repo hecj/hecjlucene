@@ -29,15 +29,14 @@ public class MySameTokenFilter extends TokenFilter {
 
 	protected MySameTokenFilter(TokenStream input,SameWordContent sameWordContent) {
 		super(input);
-		cta = this.addAttribute(CharTermAttribute.class);
-		pia = this.addAttribute(PositionIncrementAttribute.class);
-		sames = new Stack<String>();
+		this.cta = this.addAttribute(CharTermAttribute.class);
+		this.pia = this.addAttribute(PositionIncrementAttribute.class);
+		this.sames = new Stack<String>();
 		this.sameWordContent = sameWordContent;
 	}
 
 	@Override
 	public boolean incrementToken() throws IOException {
-		
 		while(sames.size()>0){
 			//将元素出桟，并获取元素
 			String str = sames.pop();
