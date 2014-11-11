@@ -1,8 +1,14 @@
 package org.test.hecjlucene.core07_advance_search;
 
+import org.apache.lucene.index.Term;
+import org.apache.lucene.search.Filter;
+import org.apache.lucene.search.NumericRangeFilter;
+import org.apache.lucene.search.NumericRangeQuery;
+import org.apache.lucene.search.QueryWrapperFilter;
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.SortField;
-import org.apache.lucene.search.function.ShortFieldSource;
+import org.apache.lucene.search.TermRangeFilter;
+import org.apache.lucene.search.WildcardQuery;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -22,6 +28,15 @@ public class TestSearcherSort {
 		luceneIndexUtil.createIndex();
 	}
 	
+	/**
+	 * @函数功能说明 排序
+	 * @修改作者名字 HECJ  
+	 * @修改时间 2014年11月11日
+	 * @修改内容
+	 * @参数：     
+	 * @return void   
+	 * @throws
+	 */
 	@Test
 	public void test01(){
 		/**
@@ -42,5 +57,28 @@ public class TestSearcherSort {
 		searcherSort.searcher("null", new Sort(new SortField("date",SortField.LONG,true)));
 */		//通过文件名排序,组合排序
 		searcherSort.searcher("null", new Sort(new SortField("date",SortField.LONG,true),new SortField("filename",SortField.STRING,true)));
+	}
+	
+	/**
+	 * @函数功能说明 过滤
+	 * @修改作者名字 HECJ  
+	 * @修改时间 2014年11月11日
+	 * @修改内容
+	 * @参数：     
+	 * @return void   
+	 * @throws
+	 */
+	@Test
+	public void test02(){
+		
+		//两个文件之间过滤
+		Filter ft = new TermRangeFilter("filename", "ChangeImageActivity.aaa", "ChangeImageActivity.ddd", true, true);
+		//文件大小过滤
+		ft = NumericRangeFilter.newIntRange("size", 1486, 1488, true, true);
+		//模糊过滤
+		ft = new QueryWrapperFilter(new WildcardQuery(new Term("filename", "*.java")));
+		searcherSort.searcherFilter("null", ft);
+		
+		
 	}
 }
