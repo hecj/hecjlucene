@@ -35,7 +35,7 @@ public class TestSearcherSort {
 		//使用默认评分排序
 		searcherSort.searcher("int", Sort.RELEVANCE);
 		System.out.println("============================================");
-		//
+		//对size排序
 		searcherSort.searcher("int", new Sort(new SortField("size",SortField.INT)));
 	}
 }
