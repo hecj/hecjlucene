@@ -19,7 +19,7 @@ public class AnalyzerUtil {
 			CharTermAttribute charTermAttribute = tokenStream
 					.addAttribute(CharTermAttribute.class);
 			while (tokenStream.incrementToken()) {
-				System.out.print(" [" + charTermAttribute + "]");
+				System.out.print(" [" + charTermAttribute + "] ");
 			}
 			System.out.println();
 		} catch (IOException e) {

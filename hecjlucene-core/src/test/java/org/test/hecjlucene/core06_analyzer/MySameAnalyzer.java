@@ -4,6 +4,8 @@ import java.io.Reader;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.standard.StandardTokenizer;
+import org.apache.lucene.util.Version;
 
 import com.chenlb.mmseg4j.Dictionary;
 import com.chenlb.mmseg4j.MaxWordSeg;

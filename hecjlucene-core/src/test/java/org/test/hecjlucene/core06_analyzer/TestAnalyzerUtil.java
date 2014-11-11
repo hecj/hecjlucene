@@ -113,10 +113,10 @@ public class TestAnalyzerUtil {
 	@Test
 	public void test06() {
 		Analyzer analyzer = new MySameAnalyzer(new SimpleSameWordContent());
-		String str = "我来自中国的一个学校。白云山脚下昭通张杰，何超杰作";
+		String str = "我是何超杰，我是中国人";
 		AnalyzerUtil.displayToken(str, analyzer);
-		System.out.println("------------------------------");
-		AnalyzerUtil.displayAllTokenInfo(str, analyzer);
+//		System.out.println("------------------------------");
+//		AnalyzerUtil.displayAllTokenInfo(str, analyzer);
 		
 	}
 	/**
@@ -131,7 +131,7 @@ public class TestAnalyzerUtil {
 	@Test
 	public void test07() {
 		Analyzer analyzer = new MySameAnalyzer(new SimpleSameWordContent());
-		String str = "我来自中国的一个学校。白云山脚下昭通张杰，何超杰作";
+		String str = "我来自中国人的一个学校。白云山脚下昭通张杰，何超杰作";
 		
 		Directory dir = new RAMDirectory();
 		IndexWriter writer = null ;
@@ -143,7 +143,7 @@ public class TestAnalyzerUtil {
 			writer.close();
 			
 			IndexSearcher searcher = new IndexSearcher(IndexReader.open(dir));
-			TopDocs topDocs = searcher.search(new TermQuery(new Term("content", "天朝")), 10);
+			TopDocs topDocs = searcher.search(new TermQuery(new Term("content", "国人")), 10);
 			Document d = searcher.doc(topDocs.scoreDocs[0].doc);
 			System.out.println(d.get("content"));
 			searcher.close();
