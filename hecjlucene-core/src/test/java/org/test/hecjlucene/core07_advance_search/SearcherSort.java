@@ -26,7 +26,7 @@ public class SearcherSort {
 	
 	/**
 	 * 静态代码块获取IndexReader
-	 */
+	 
 	static{
 		try {
 			reader = IndexReader.open(LuceneIndexUtil.getDirectory());
@@ -36,7 +36,7 @@ public class SearcherSort {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 	
 	/**
 	 * @函数功能说明 得到IndexSearcher
@@ -140,7 +140,7 @@ public class SearcherSort {
 			ScoreDoc[] scoreDocs = topDocs.scoreDocs;
 			for(ScoreDoc sd : scoreDocs){
 				Document doc = searcher.doc(sd.doc);
-				System.out.println(sd.doc+" ==== score:("+sd.score+") ====    filename:"+doc.get("filename")+" ====   path:"+doc.get("path")+" ====  size:"+doc.get("size")+"   date:"+format.format(new Date(Long.valueOf(doc.get("date")))));
+				System.out.println(sd.doc+" ==== score:("+sd.score+") ====    filename:"+doc.get("filename")+" ====   path:"+doc.get("path")+" ====  size:"+doc.get("size")+"   date:"+format.format(new Date(Long.valueOf(doc.get("date"))))+" === myScore:"+doc.get("score"));
 			}
 			 
 		} catch (ParseException e) {

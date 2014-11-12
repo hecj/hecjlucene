@@ -3,6 +3,7 @@ package org.test.hecjlucene.core07_advance_search;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Random;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -136,17 +137,17 @@ public class LuceneIndexUtil {
 					Version.LUCENE_35, new StandardAnalyzer(Version.LUCENE_35)));
 			File[] files = new File(FILE_DIRETORY).listFiles();
 			Document doc = null;
+			Random random = new Random();
 			for (File f : files) {
+				int score = random.nextInt(100);
 				doc = new Document();
 				doc.add(new Field("content", new FileReader(f)));
-				doc.add(new Field("filename", f.getName(), Field.Store.YES,
-						Field.Index.NOT_ANALYZED));
-				doc.add(new Field("path", f.getAbsolutePath(), Field.Store.YES,
-						Field.Index.NOT_ANALYZED));
-				doc.add(new NumericField("date", Field.Store.YES, true)
-						.setLongValue(f.lastModified()));
-				doc.add(new NumericField("size", Field.Store.YES, true)
-						.setLongValue((int) (f.length())));
+				doc.add(new Field("filename", f.getName(), Field.Store.YES,Field.Index.NOT_ANALYZED));
+				doc.add(new Field("path", f.getAbsolutePath(), Field.Store.YES,Field.Index.NOT_ANALYZED));
+				doc.add(new NumericField("date", Field.Store.YES, true).setLongValue(f.lastModified()));
+				doc.add(new NumericField("size", Field.Store.YES, true).setLongValue((int) (f.length())));
+				//随机评分
+				doc.add(new NumericField("score", Field.Store.YES, true).setIntValue(score));
 				writer.addDocument(doc);
 			}
 
