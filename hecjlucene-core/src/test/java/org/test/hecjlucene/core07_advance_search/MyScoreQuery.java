@@ -8,6 +8,7 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.search.FieldCache;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
@@ -41,6 +42,7 @@ public class MyScoreQuery {
 			FieldScoreQuery fieldScoreQuery = new FieldScoreQuery("score", Type.INT);
 			//根据评分域和原有的Query创建自定义的Query对象
 			MyCustomScoreQuery customScoreQuery = new MyCustomScoreQuery(query,fieldScoreQuery);
+			//文件评分
 			//查询
 			TopDocs topDocs = searcher.search(customScoreQuery, 100);
 			ScoreDoc[] scoreDocs = topDocs.scoreDocs;
@@ -50,6 +52,27 @@ public class MyScoreQuery {
 			}
 			searcher.close();
 			
+		} catch (CorruptIndexException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	public void searchByFileNameScoreQuery(){
+		
+		try {
+			IndexSearcher searcher = new IndexSearcher(IndexReader.open(LuceneIndexUtil.getDirectory()));
+			Query query = new TermQuery(new Term("content","null"));
+			//文件评分
+			FileNameScoreQuery customScoreQuery = new FileNameScoreQuery(query);
+			//查询
+			TopDocs topDocs = searcher.search(customScoreQuery, 100);
+			ScoreDoc[] scoreDocs = topDocs.scoreDocs;
+			for(ScoreDoc sd : scoreDocs){
+				Document doc = searcher.doc(sd.doc);
+				System.out.println(sd.doc+" ==== score:("+sd.score+") ====    filename:"+doc.get("filename")+" ====   path:"+doc.get("path")+" ====  size:"+doc.get("size")+"   date:"+format.format(new Date(Long.valueOf(doc.get("date"))))+"======score:"+doc.get("score"));
+			}
+			searcher.close();
 			
 		} catch (CorruptIndexException e) {
 			e.printStackTrace();
@@ -114,6 +137,63 @@ public class MyScoreQuery {
 		}
 		
 	}
+	
+	/**
+	 * @类功能说明：文件排序
+	 * @类修改者：
+	 * @修改日期：
+	 * @修改说明：
+	 * @作者：HECJ
+	 * @创建时间：2014年11月12日 下午10:14:08
+	 * @版本：V1.0
+	 */
+	private class FileNameScoreQuery extends CustomScoreQuery{
+
+		public FileNameScoreQuery(Query subQuery) {
+			super(subQuery);
+			
+		}
+		@Override
+		protected CustomScoreProvider getCustomScoreProvider(IndexReader reader)
+				throws IOException {
+			return new FileNameScoreProvider(reader);
+		}
+	}
+	/**
+	 * @类功能说明：文件排序
+	 * @类修改者：
+	 * @修改日期：
+	 * @修改说明：
+	 * @作者：HECJ
+	 * @创建时间：2014年11月12日 下午10:14:25
+	 * @版本：V1.0
+	 */
+	private class FileNameScoreProvider extends CustomScoreProvider{
+		String[] filenames = null ;
+		public FileNameScoreProvider(IndexReader reader) {
+			super(reader);
+			try {
+				filenames = FieldCache.DEFAULT.getStrings(reader, "filename");
+			
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+					
+		}
+		@Override
+		public float customScore(int doc, float subQueryScore, float valSrcScore)
+				throws IOException {
+			
+			String filename = filenames[doc];
+			if(filename.endsWith(".java")||filename.endsWith(".ccc")){
+				return subQueryScore*1.5f;
+			}
+			return subQueryScore/1.5f;
+		}
+		
+	}
+	
+	
 	
 	
 	

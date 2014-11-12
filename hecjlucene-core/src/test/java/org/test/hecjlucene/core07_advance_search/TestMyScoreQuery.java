@@ -18,4 +18,10 @@ public class TestMyScoreQuery {
 		MyScoreQuery myScoreQuery = new MyScoreQuery();
 		myScoreQuery.searchByScoreQuery();
 	}
+	@Test
+	public void test02(){
+		
+		MyScoreQuery myScoreQuery = new MyScoreQuery();
+		myScoreQuery.searchByFileNameScoreQuery();
+	}
 }
