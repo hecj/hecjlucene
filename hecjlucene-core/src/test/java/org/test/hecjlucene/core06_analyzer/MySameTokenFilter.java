@@ -47,7 +47,7 @@ public class MySameTokenFilter extends TokenFilter {
 			restoreState(currState);
 			cta.setEmpty();
 			cta.append(str);
-			// 设置位置0
+			// 设置位置0 表示同义词 ，1：表示正常的连接
 			pia.setPositionIncrement(0);
 //			System.out.println("currState:" + currState+cta.toString()+"~"+str);
 			return true;

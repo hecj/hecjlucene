@@ -142,7 +142,7 @@ public class SearcherSort {
 				Document doc = searcher.doc(sd.doc);
 				System.out.println(sd.doc+" ==== score:("+sd.score+") ====    filename:"+doc.get("filename")+" ====   path:"+doc.get("path")+" ====  size:"+doc.get("size")+"   date:"+format.format(new Date(Long.valueOf(doc.get("date")))));
 			}
-			
+			 
 		} catch (ParseException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

@@ -75,7 +75,7 @@ public class TestSearcherSort {
 		Filter ft = new TermRangeFilter("filename", "ChangeImageActivity.aaa", "ChangeImageActivity.ddd", true, true);
 		//文件大小过滤
 		ft = NumericRangeFilter.newIntRange("size", 1486, 1488, true, true);
-		//模糊过滤
+		//模糊过滤 
 		ft = new QueryWrapperFilter(new WildcardQuery(new Term("filename", "*.java")));
 		searcherSort.searcherFilter("null", ft);
 		
