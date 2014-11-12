@@ -185,7 +185,7 @@ public class MyScoreQuery {
 				throws IOException {
 			
 			String filename = filenames[doc];
-			if(filename.endsWith(".java")||filename.endsWith(".ccc")){
+			if(filename.endsWith(".java")){
 				return subQueryScore*1.5f;
 			}
 			return subQueryScore/1.5f;
