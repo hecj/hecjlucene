@@ -66,7 +66,7 @@ public class MyScoreQuery {
 			//文件评分
 			FileNameScoreQuery customScoreQuery = new FileNameScoreQuery(query);
 			//查询
-			TopDocs topDocs = searcher.search(customScoreQuery, 100);
+			TopDocs topDocs = searcher.search(customScoreQuery, 200);
 			ScoreDoc[] scoreDocs = topDocs.scoreDocs;
 			for(ScoreDoc sd : scoreDocs){
 				Document doc = searcher.doc(sd.doc);
