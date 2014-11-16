@@ -94,6 +94,9 @@ public class TestSearcherSort {
 		
 		CustomParserUtil customParserUtil = new CustomParserUtil();
 		
-		customParserUtil.searcherByCustomQuery("null");
+//		customParserUtil.searcherByCustomQuery("int");
+//		customParserUtil.searcherByCustomQuery("size:[0 TO 90000000]");
+//		customParserUtil.searcherByCustomQuery("score:[1 TO 10000]");
+		customParserUtil.searcherByCustomQuery("date:[2014-11-11 TO 2014-11-12]");
 	}
 }

@@ -135,7 +135,7 @@ public class LuceneIndexUtil {
 				doc.add(new NumericField("date", Field.Store.YES, true)
 						.setLongValue(f.lastModified()));
 				doc.add(new NumericField("size", Field.Store.YES, true)
-						.setLongValue((int) (f.length() / 1024)));
+						.setIntValue((int) (f.length())));
 				writer.addDocument(doc);
 			}
 

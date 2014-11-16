@@ -32,14 +32,14 @@ public class CustomParserUtil {
 	public void searcherByCustomQuery(String queryStr){
 		
 		IndexSearcher searcher = new LuceneIndexUtil().getSearcher();
-		QueryParser parser = new CustomParser(Version.LUCENE_35, "content", new StandardAnalyzer(Version.LUCENE_35));
+		CustomParser parser = new CustomParser(Version.LUCENE_35, "content", new StandardAnalyzer(Version.LUCENE_35));
 		try {
 			//相当于创建一个查询语句
 			Query query = parser.parse(queryStr);
 			//执行查询
 			TopDocs topDocs = null;
 			topDocs = searcher.search(query, 50);
-			
+			System.out.println(query);
 			ScoreDoc[] scoreDocs = topDocs.scoreDocs;
 			for(ScoreDoc sd : scoreDocs){
 				Document doc = searcher.doc(sd.doc);
