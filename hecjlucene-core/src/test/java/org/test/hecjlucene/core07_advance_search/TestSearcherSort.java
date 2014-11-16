@@ -3,7 +3,6 @@ package org.test.hecjlucene.core07_advance_search;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.Filter;
 import org.apache.lucene.search.NumericRangeFilter;
-import org.apache.lucene.search.NumericRangeQuery;
 import org.apache.lucene.search.QueryWrapperFilter;
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.SortField;
@@ -80,5 +79,21 @@ public class TestSearcherSort {
 		
 		searcherSort.searcherFilter("null", ft);
 		
+	}
+	/**
+	 * @函数功能说明 自定义QueryParser测试,禁用通配符查询
+	 * @修改作者名字 HECJ  
+	 * @修改时间 2014年11月16日
+	 * @修改内容
+	 * @参数：     
+	 * @return void   
+	 * @throws
+	 */
+	@Test
+	public void test03(){
+		
+		CustomParserUtil customParserUtil = new CustomParserUtil();
+		
+		customParserUtil.searcherByCustomQuery("null");
 	}
 }
