@@ -135,12 +135,15 @@ public class LuceneIndexUtil {
 		try {
 			writer = new IndexWriter(getDirectory(), new IndexWriterConfig(
 					Version.LUCENE_35, new StandardAnalyzer(Version.LUCENE_35)));
+			writer.deleteAll();
 			File[] files = new File(FILE_DIRETORY).listFiles();
 			Document doc = null;
 			Random random = new Random();
+			int index = 0;
 			for (File f : files) {
 				int score = random.nextInt(100);
 				doc = new Document();
+				doc.add(new Field("id", String.valueOf(index++),Field.Store.YES,Field.Index.NOT_ANALYZED));
 				doc.add(new Field("content", new FileReader(f)));
 				doc.add(new Field("filename", f.getName(), Field.Store.YES,Field.Index.NOT_ANALYZED));
 				doc.add(new Field("path", f.getAbsolutePath(), Field.Store.YES,Field.Index.NOT_ANALYZED));
