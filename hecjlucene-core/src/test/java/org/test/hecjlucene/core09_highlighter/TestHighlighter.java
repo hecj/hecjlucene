@@ -13,6 +13,6 @@ public class TestHighlighter {
 	@Test
 	public void test02(){
 		HighlighterSearch highlighterSearch = new HighlighterSearch();
-		highlighterSearch.highlighterByFileContent("null");
+		highlighterSearch.highlighterByFileContent("void");
 	}
 }
