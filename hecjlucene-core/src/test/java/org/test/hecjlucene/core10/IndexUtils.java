@@ -20,6 +20,8 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.NRTManager;
+import org.apache.lucene.search.NRTManagerReopenThread;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.SearcherManager;
@@ -32,6 +34,8 @@ import org.apache.lucene.util.Version;
 
 /**
  * @类功能说明： Lucene实现分页功能
+ * 1、如果使用SearcherManager，索引提交后才能实现近实时搜索
+ * 2、或者使用NrtManager实现近实时搜索
  * @类修改者：
  * @修改日期：
  * @修改说明：
@@ -46,10 +50,26 @@ public class IndexUtils {
 	private static String FILE_DIRETORY = "E:\\lucene\\file";
 
 	private Directory directory = null;
-	private SearcherManager searcherManager = null ;
+	private SearcherManager searcherManager = null ; 
+	
+	private IndexWriter  writer = null ;
+	private NRTManager nrtManager = null ;
+	
 	public IndexUtils() {
 		try {
 			directory = FSDirectory.open(new File(INDEX_DIRETORY));
+			writer = new IndexWriter(directory, new IndexWriterConfig(Version.LUCENE_35, new StandardAnalyzer(Version.LUCENE_35)));
+			nrtManager = new NRTManager(writer, new SearcherWarmer() {
+				public void warm(IndexSearcher s) throws IOException {
+					System.out.println("nrtManager ——> warm");
+				}
+			});
+			NRTManagerReopenThread  reopenThread = new NRTManagerReopenThread(nrtManager, 5.0, 0.025);
+			reopenThread.setDaemon(true);
+			reopenThread.setName("NRTManagerReopenThread  -->run ");
+			reopenThread.start();
+			//通过NrtManager获取SearcherManager
+			searcherManager = nrtManager.getSearcherManager(true);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -70,6 +90,16 @@ public class IndexUtils {
 		return searcherManager ;
 	}
 	
+	private void commit(){
+		try {
+			writer.commit();
+		} catch (CorruptIndexException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * @函数功能说明 创建索引
 	 * @修改作者名字 JECJ
@@ -80,15 +110,15 @@ public class IndexUtils {
 	 * @throws
 	 */
 	public void createIndex() {
-		IndexWriter writer = null;
+		IndexWriter writer = this.writer;
 		try {
-			writer = new IndexWriter(directory, new IndexWriterConfig(
-					Version.LUCENE_35, new StandardAnalyzer(Version.LUCENE_35)));
 			File[] files = new File(FILE_DIRETORY).listFiles();
 			Document doc = null;
 			writer.deleteAll();
+			int i = 0;
 			for (File f : files) {
 				doc = new Document();
+				doc.add(new Field("id",(i++)+"",Field.Store.YES,Field.Index.NOT_ANALYZED_NO_NORMS));
 				doc.add(new Field("content", new FileReader(f)));
 				doc.add(new Field("filename", f.getName(), Field.Store.YES,
 						Field.Index.NOT_ANALYZED));
@@ -118,13 +148,23 @@ public class IndexUtils {
 		}
 	}
 	
-	public void deleteByFileName(String fileName) {
-		IndexWriter writer = null;
-		
+	public void update(){
 		try {
-			writer = new IndexWriter(directory,new IndexWriterConfig(Version.LUCENE_35,new StandardAnalyzer(Version.LUCENE_35)));
-			writer.deleteDocuments(new Term("filename",fileName));
-			writer.commit();
+			Document doc = new Document();
+			doc.add(new Field("path", String.valueOf(System.currentTimeMillis()), Field.Store.YES,
+					Field.Index.NOT_ANALYZED));
+			doc.add(new Field("id","11",Field.Store.YES,Field.Index.NOT_ANALYZED_NO_NORMS));
+			nrtManager.updateDocument(new Term("id","1"), doc);
+		} catch (CorruptIndexException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void deleteByFileName(String fileName) {
+		try {
+			nrtManager.deleteDocuments(new Term("filename",fileName));
 		} catch (CorruptIndexException e) {
 			e.printStackTrace();
 		} catch (LockObtainFailedException e) {
@@ -132,13 +172,6 @@ public class IndexUtils {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				if(writer!=null) writer.close();
-			} catch (CorruptIndexException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		}
 	}
 	
@@ -169,6 +202,7 @@ public class IndexUtils {
 		
 		IndexSearcher searcher = getSearcherManager().acquire();
 		try {
+			//判断是否需要重新打开一个searcher
 			getSearcherManager().maybeReopen();
 			//创建QueryParser
 			QueryParser parser = new QueryParser(Version.LUCENE_35, "content", new StandardAnalyzer(Version.LUCENE_35));
@@ -183,7 +217,7 @@ public class IndexUtils {
 				ScoreDoc sd = scoreDocs[i];
 				//获取Document
 				Document doc = searcher.doc(sd.doc);
-				System.out.println(i+"-->filename:"+doc.get("filename")+",path:"+doc.get("path"));
+				System.out.println(doc.get("id")+"-->filename:"+doc.get("filename")+",path:"+doc.get("path"));
 			}
 		} catch (ParseException e) {
 			e.printStackTrace();

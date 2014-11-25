@@ -27,12 +27,17 @@ public class TestIndexUtils {
 		IndexUtils indexUtils = new IndexUtils();
 		for(int i=0;i<50;i++){
 			indexUtils.queryByQuery("String");
+			System.out.println("\n------deleteByFileName----------------------------------------------------");
+			if(i == 0)
+			indexUtils.deleteByFileName("BeanToBakBean.java");
+			if(i == 2)
+				indexUtils.update();
+			
 			try {
-				Thread.sleep(5000);
+				Thread.sleep(10000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			System.out.println("\n----------------------------------------------------------");
 		}
 		
 	}
