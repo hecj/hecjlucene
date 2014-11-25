@@ -25,7 +25,7 @@ public class TestIndexUtils {
 	@Test
 	public void search(){
 		IndexUtils indexUtils = new IndexUtils();
-		for(int i=0;i<5;i++){
+		for(int i=0;i<50;i++){
 			indexUtils.queryByQuery("String");
 			try {
 				Thread.sleep(5000);
