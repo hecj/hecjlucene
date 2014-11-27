@@ -90,7 +90,7 @@ public class IndexUtils {
 		return searcherManager ;
 	}
 	
-	private void commit(){
+	public void commit(){
 		try {
 			writer.commit();
 		} catch (CorruptIndexException e) {

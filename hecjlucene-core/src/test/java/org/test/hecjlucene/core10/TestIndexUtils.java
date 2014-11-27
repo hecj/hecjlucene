@@ -23,6 +23,13 @@ public class TestIndexUtils {
 	}
 	
 	@Test
+	public void commit(){
+		IndexUtils indexUtils = new IndexUtils();
+		indexUtils.commit();
+	}
+	
+	
+	@Test
 	public void search(){
 		IndexUtils indexUtils = new IndexUtils();
 		for(int i=0;i<50;i++){
