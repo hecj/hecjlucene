@@ -35,6 +35,7 @@
 		<lucene.version>3.5.0</lucene.version>
 		<junit.version>4.4</junit.version>
 		<commons.io.version>2.2</commons.io.version>
+		<tika.version>1.6</tika.version>
 	</properties>
 
 	<dependencyManagement>
@@ -63,7 +64,19 @@
 				<artifactId>commons-io</artifactId>
 				<version>${commons.io.version}</version>
 			</dependency>
-
+			
+			<dependency>
+				<groupId>org.apache.tika</groupId>
+				<artifactId>tika-core</artifactId>
+				<version>${tika.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>org.apache.tika</groupId>
+				<artifactId>tika-parsers</artifactId>
+				<version>${tika.version}</version>
+			</dependency>
+			
 
 		</dependencies>
 
