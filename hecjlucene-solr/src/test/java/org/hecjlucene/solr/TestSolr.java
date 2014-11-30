@@ -5,8 +5,12 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 import org.hecjlucene.bean.Message;
 import org.junit.Before;
@@ -174,6 +178,40 @@ public class TestSolr {
 		}
 		
 	}
+	
+	@Test
+	public void query(){
+		
+		SolrQuery query = new SolrQuery("msg_title:bean");
+		try {
+			QueryResponse response = server.query(query);
+			SolrDocumentList documentList = response.getResults();
+			System.out.println(documentList.getNumFound());
+			for(SolrDocument doc :documentList){
+				System.out.println(doc.getFieldValue("id")+",msg_field:"+doc.getFieldValue("msg_content")+","+doc.getFieldValue("msg_content"));
+			}
+		} catch (SolrServerException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 }
