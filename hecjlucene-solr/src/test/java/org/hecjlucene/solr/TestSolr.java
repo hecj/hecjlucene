@@ -166,8 +166,12 @@ public class TestSolr {
 	public void addBeanDocument(){
 		
 		List<Message> list = new ArrayList<Message>();
-		list.add(new Message("5","测试一下bean",new String[]{"我的bean的附件一","我的bean的附件 二"}));
-		list.add(new Message("6","测试一下bean",new String[]{"我的bean的附件一","我的bean的附件 二"}));
+		list.add(new Message("7","测试一下bean",new String[]{"我的bean的附件一","我的bean的附件 二"}));
+		list.add(new Message("8","测试一下bean",new String[]{"我的bean的附件一","我的bean的附件 二"}));
+		list.add(new Message("9","测试一下bean",new String[]{"我的bean的附件一","我的bean的附件 二"}));
+		list.add(new Message("10","测试一下bean",new String[]{"我的bean的附件一","我的bean的附件 二"}));
+		list.add(new Message("11","测试一下bean",new String[]{"我的bean的附件一","我的bean的附件 二"}));
+		list.add(new Message("12","测试一下bean",new String[]{"我的bean的附件一","我的bean的附件 二"}));
 		try {
 			server.addBeans(list);
 			server.commit();
@@ -184,6 +188,9 @@ public class TestSolr {
 		
 		SolrQuery query = new SolrQuery("msg_title:bean");
 		try {
+			//分页查询
+			query.setStart(2);//多少条开始
+			query.setRows(2); //每页多少条
 			QueryResponse response = server.query(query);
 			SolrDocumentList documentList = response.getResults();
 			System.out.println(documentList.getNumFound());
