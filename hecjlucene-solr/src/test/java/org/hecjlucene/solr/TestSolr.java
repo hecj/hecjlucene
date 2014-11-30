@@ -195,7 +195,7 @@ public class TestSolr {
 			SolrDocumentList documentList = response.getResults();
 			System.out.println(documentList.getNumFound());
 			for(SolrDocument doc :documentList){
-				System.out.println(doc.getFieldValue("id")+",msg_field:"+doc.getFieldValue("msg_content")+","+doc.getFieldValue("msg_content"));
+				System.out.println(doc.getFieldValue("id")+",msg_title:"+doc.getFieldValue("msg_content")+","+doc.getFieldValue("msg_content"));
 			}
 		} catch (SolrServerException e) {
 			e.printStackTrace();
@@ -203,6 +203,25 @@ public class TestSolr {
 		
 	}
 	
+	@Test
+	public void queryBean(){
+		
+		SolrQuery query = new SolrQuery("msg_title:bean");
+		try {
+			//分页查询
+			query.setStart(2);//多少条开始
+			query.setRows(5); //每页多少条
+			QueryResponse response = server.query(query);
+			List<Message> list = response.getBeans(Message.class);
+			System.out.println(list.size());
+			for(Message m :list){
+				System.out.println(m.getId()+",msg_title:"+m.getTitle()+","+m.getContent());
+			}
+		} catch (SolrServerException e) {
+			e.printStackTrace();
+		}
+		
+	}
 	
 	
 	
