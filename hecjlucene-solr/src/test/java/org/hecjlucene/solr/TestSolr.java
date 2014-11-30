@@ -223,6 +223,40 @@ public class TestSolr {
 		
 	}
 	
+	/**
+	 * @函数功能说明 高亮
+	 * @修改作者名字 HECJ  
+	 * @修改时间 2014年11月30日
+	 * @修改内容
+	 * @参数：     
+	 * @return void   
+	 * @throws
+	 */
+	@Test
+	public void queryHeightler(){
+		
+		SolrQuery query = new SolrQuery("msg_title:bean");
+		//设置高亮标签span
+		query.setHighlight(true).setHighlightSimplePre("<span color='red'>").setHighlightSimplePost("</span>")
+						.setStart(2).setRows(2);
+		try {
+			//高亮字段
+			query.setParam("hl.fl", "msg_title,msg_content");
+			QueryResponse response = server.query(query);
+			SolrDocumentList list = response.getResults();
+			System.out.println(list.getNumFound());
+			for(SolrDocument doc : list){
+				String id = (String) doc.getFieldValue("id");
+				List<String> content = response.getHighlighting().get(id).get("msg_content");	
+				System.out.println(content);
+			}
+			
+		} catch (SolrServerException e) {
+			e.printStackTrace();
+		}
+		
+		
+	}
 	
 	
 	
