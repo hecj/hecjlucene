@@ -5,3 +5,5 @@ hecjlucene-core/.classpath
 
 # Maven
 hecjlucene-core/target/*
+hecjlucene-solr/target/*
+hecjlucene-web/target/*

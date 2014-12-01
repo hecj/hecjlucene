@@ -8,6 +8,7 @@
 	<modules>
 		<module>hecjlucene-core</module>
     	<module>hecjlucene-solr</module>
+    	<module>hecjlucene-web</module>
 	</modules>
 
 
@@ -36,6 +37,8 @@
 		<junit.version>4.4</junit.version>
 		<commons.io.version>2.2</commons.io.version>
 		<tika.version>1.6</tika.version>
+		<jsp-api.version>2.2</jsp-api.version>
+		<servlet-api.version>2.5</servlet-api.version>
 	</properties>
 
 	<dependencyManagement>
@@ -76,6 +79,23 @@
 				<artifactId>tika-parsers</artifactId>
 				<version>${tika.version}</version>
 			</dependency>
+			
+			<!-- JSP -->
+			<dependency>
+				<groupId>javax.servlet.jsp</groupId>
+				<artifactId>jsp-api</artifactId>
+				<version>${jsp-api.version}</version>
+				<scope>provided</scope>
+			</dependency>
+
+			<!-- Servlet -->
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>servlet-api</artifactId>
+				<version>${servlet-api.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			
 			
 
 		</dependencies>
