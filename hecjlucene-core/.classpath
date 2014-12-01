@@ -12,5 +12,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/tika-core-1.6.jar"/>
 	<classpathentry kind="lib" path="lib/tika-parsers-1.6.jar"/>
+	<classpathentry kind="lib" path="lib/openxml4j-1.0-beta.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
